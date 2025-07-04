@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "z80.h": "c",
+        "compare": "c",
+        "cstdint": "c",
+        "stdint.h": "c",
+        "z80_flags.h": "c",
+        "z80_op.h": "c",
+        "stdbool.h": "c"
+    }
+}
