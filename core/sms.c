@@ -7,13 +7,13 @@ struct sms_core_t *sms_create(struct sms_core_t *core)
     sms_mem_init(&core->mem);
     z80_init(&core->cpu);
 
-    core->cpu.read8 = sms_mem_read8;
-    core->cpu.write8 = sms_mem_write8;
-    core->cpu.read16 = sms_mem_read16;
-    core->cpu.write16 = sms_mem_write16;
+    core->cpu.read8   = (uint8_t (*)(void*, uint16_t)) sms_mem_read8;
+    core->cpu.write8  = (void (*)(void*, uint16_t, uint8_t)) sms_mem_write8;
+    core->cpu.read16  = (uint16_t (*)(void *, uint16_t)) sms_mem_read16;
+    core->cpu.write16 = (void (*)(void*, uint16_t, uint16_t)) sms_mem_write16;
     core->cpu.memory_ctx = &core->mem;
 
-    sms_mem_write8(&core->mem, 0x07, 0x09);
+    sms_mem_write8(&core->mem, 0x07, 0xC9);
 
     return core;
 }

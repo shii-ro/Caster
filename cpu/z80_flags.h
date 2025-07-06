@@ -101,6 +101,7 @@ uint8_t set_flags_sll(struct z80_t *cpu, uint8_t r);
 uint8_t set_flags_srl(struct z80_t *cpu, uint8_t r);
 uint8_t set_flags_daa(struct z80_t *cpu);
 uint8_t set_flags_cpl(struct z80_t *cpu);
+void set_flags_rotate_digit(struct z80_t *cpu);
 void set_flags_ccf(struct z80_t *cpu);
 void set_flags_scf(struct z80_t *cpu);
 #endif

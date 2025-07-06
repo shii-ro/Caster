@@ -332,84 +332,84 @@ void z80_execute_fd_cb_instruction(struct z80_t *cpu, int8_t d)
     switch (cb_opcode)
     {
     // ROTATE LEFT CIRCULAR (RLC) - 8-bit registers
-    // case FD_CB_RLC_B: cpu->registers.B = z80_op_rlc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RLC_C: cpu->registers.C = z80_op_rlc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RLC_D: cpu->registers.D = z80_op_rlc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RLC_E: cpu->registers.E = z80_op_rlc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RLC_H: cpu->registers.H = z80_op_rlc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RLC_L: cpu->registers.L = z80_op_rlc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RLC_HL: z80_write8(cpu, (cpu->registers.IY + d), z80_op_rlc(cpu, z80_read8(cpu, (cpu->registers.IY + d)))); break;
-    // case FD_CB_RLC_A: cpu->registers.A = z80_op_rlc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RLC_B: cpu->registers.B = z80_op_rlc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RLC_C: cpu->registers.C = z80_op_rlc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RLC_D: cpu->registers.D = z80_op_rlc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RLC_E: cpu->registers.E = z80_op_rlc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RLC_H: cpu->registers.H = z80_op_rlc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RLC_L: cpu->registers.L = z80_op_rlc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RLC_HL: z80_write8(cpu, (cpu->registers.IY + d), z80_op_rlc(cpu, z80_read8(cpu, (cpu->registers.IY + d)))); break;
+    case FD_CB_RLC_A: cpu->registers.A = z80_op_rlc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
 
-    // // ROTATE RIGHT CIRCULAR (RRC) - 8-bit registers
-    // case FD_CB_RRC_B: cpu->registers.B = z80_op_rrc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RRC_C: cpu->registers.C = z80_op_rrc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RRC_D: cpu->registers.D = z80_op_rrc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RRC_E: cpu->registers.E = z80_op_rrc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RRC_H: cpu->registers.H = z80_op_rrc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RRC_L: cpu->registers.L = z80_op_rrc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RRC_HL: z80_write8(cpu, (cpu->registers.IY + d), z80_op_rrc(cpu, z80_read8(cpu, (cpu->registers.IY + d)))); break;
-    // case FD_CB_RRC_A: cpu->registers.A = z80_op_rrc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    // ROTATE RIGHT CIRCULAR (RRC) - 8-bit registers
+    case FD_CB_RRC_B: cpu->registers.B = z80_op_rrc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RRC_C: cpu->registers.C = z80_op_rrc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RRC_D: cpu->registers.D = z80_op_rrc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RRC_E: cpu->registers.E = z80_op_rrc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RRC_H: cpu->registers.H = z80_op_rrc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RRC_L: cpu->registers.L = z80_op_rrc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RRC_HL: z80_write8(cpu, (cpu->registers.IY + d), z80_op_rrc(cpu, z80_read8(cpu, (cpu->registers.IY + d)))); break;
+    case FD_CB_RRC_A: cpu->registers.A = z80_op_rrc(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
 
-    // // ROTATE LEFT (RL) - 8-bit registers
-    // case FD_CB_RL_B: cpu->registers.B = z80_op_rl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RL_C: cpu->registers.C = z80_op_rl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RL_D: cpu->registers.D = z80_op_rl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RL_E: cpu->registers.E = z80_op_rl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RL_H: cpu->registers.H = z80_op_rl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RL_L: cpu->registers.L = z80_op_rl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RL_HL: z80_write8(cpu, (cpu->registers.IY + d), z80_op_rl(cpu, z80_read8(cpu, (cpu->registers.IY + d)))); break;
-    // case FD_CB_RL_A: cpu->registers.A = z80_op_rl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    // ROTATE LEFT (RL) - 8-bit registers
+    case FD_CB_RL_B: cpu->registers.B = z80_op_rl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RL_C: cpu->registers.C = z80_op_rl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RL_D: cpu->registers.D = z80_op_rl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RL_E: cpu->registers.E = z80_op_rl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RL_H: cpu->registers.H = z80_op_rl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RL_L: cpu->registers.L = z80_op_rl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RL_HL: z80_write8(cpu, (cpu->registers.IY + d), z80_op_rl(cpu, z80_read8(cpu, (cpu->registers.IY + d)))); break;
+    case FD_CB_RL_A: cpu->registers.A = z80_op_rl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
 
-    // // ROTATE RIGHT (RR) - 8-bit registers
-    // case FD_CB_RR_B: cpu->registers.B = z80_op_rr(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RR_C: cpu->registers.C = z80_op_rr(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RR_D: cpu->registers.D = z80_op_rr(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RR_E: cpu->registers.E = z80_op_rr(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RR_H: cpu->registers.H = z80_op_rr(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RR_L: cpu->registers.L = z80_op_rr(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_RR_HL: z80_write8(cpu, (cpu->registers.IY + d), z80_op_rr(cpu, z80_read8(cpu, (cpu->registers.IY + d)))); break;
-    // case FD_CB_RR_A: cpu->registers.A = z80_op_rr(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    // ROTATE RIGHT (RR) - 8-bit registers
+    case FD_CB_RR_B: cpu->registers.B = z80_op_rr(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RR_C: cpu->registers.C = z80_op_rr(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RR_D: cpu->registers.D = z80_op_rr(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RR_E: cpu->registers.E = z80_op_rr(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RR_H: cpu->registers.H = z80_op_rr(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RR_L: cpu->registers.L = z80_op_rr(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_RR_HL: z80_write8(cpu, (cpu->registers.IY + d), z80_op_rr(cpu, z80_read8(cpu, (cpu->registers.IY + d)))); break;
+    case FD_CB_RR_A: cpu->registers.A = z80_op_rr(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
 
-    // // SHIFT LEFT ARITHMETIC (SLA) - 8-bit registers
-    // case FD_CB_SLA_B: cpu->registers.B = z80_op_sla(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SLA_C: cpu->registers.C = z80_op_sla(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SLA_D: cpu->registers.D = z80_op_sla(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SLA_E: cpu->registers.E = z80_op_sla(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SLA_H: cpu->registers.H = z80_op_sla(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SLA_L: cpu->registers.L = z80_op_sla(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SLA_HL: z80_write8(cpu, (cpu->registers.IY + d), z80_op_sla(cpu, z80_read8(cpu, (cpu->registers.IY + d)))); break;
-    // case FD_CB_SLA_A: cpu->registers.A = z80_op_sla(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    // SHIFT LEFT ARITHMETIC (SLA) - 8-bit registers
+    case FD_CB_SLA_B: cpu->registers.B = z80_op_sla(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SLA_C: cpu->registers.C = z80_op_sla(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SLA_D: cpu->registers.D = z80_op_sla(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SLA_E: cpu->registers.E = z80_op_sla(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SLA_H: cpu->registers.H = z80_op_sla(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SLA_L: cpu->registers.L = z80_op_sla(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SLA_HL: z80_write8(cpu, (cpu->registers.IY + d), z80_op_sla(cpu, z80_read8(cpu, (cpu->registers.IY + d)))); break;
+    case FD_CB_SLA_A: cpu->registers.A = z80_op_sla(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
 
-    // // SHIFT RIGHT ARITHMETIC (SRA) - 8-bit registers
-    // case FD_CB_SRA_B: cpu->registers.B = z80_op_sra(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SRA_C: cpu->registers.C = z80_op_sra(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SRA_D: cpu->registers.D = z80_op_sra(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SRA_E: cpu->registers.E = z80_op_sra(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SRA_H: cpu->registers.H = z80_op_sra(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SRA_L: cpu->registers.L = z80_op_sra(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SRA_HL: z80_write8(cpu, (cpu->registers.IY + d), z80_op_sra(cpu, z80_read8(cpu, (cpu->registers.IY + d)))); break;
-    // case FD_CB_SRA_A: cpu->registers.A = z80_op_sra(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    // SHIFT RIGHT ARITHMETIC (SRA) - 8-bit registers
+    case FD_CB_SRA_B: cpu->registers.B = z80_op_sra(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SRA_C: cpu->registers.C = z80_op_sra(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SRA_D: cpu->registers.D = z80_op_sra(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SRA_E: cpu->registers.E = z80_op_sra(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SRA_H: cpu->registers.H = z80_op_sra(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SRA_L: cpu->registers.L = z80_op_sra(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SRA_HL: z80_write8(cpu, (cpu->registers.IY + d), z80_op_sra(cpu, z80_read8(cpu, (cpu->registers.IY + d)))); break;
+    case FD_CB_SRA_A: cpu->registers.A = z80_op_sra(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
 
-    // // SHIFT LEFT LOGICAL (SLL) - 8-bit registers (undocumented)
-    // case FD_CB_SLL_B: cpu->registers.B = z80_op_sll(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SLL_C: cpu->registers.C = z80_op_sll(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SLL_D: cpu->registers.D = z80_op_sll(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SLL_E: cpu->registers.E = z80_op_sll(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SLL_H: cpu->registers.H = z80_op_sll(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SLL_L: cpu->registers.L = z80_op_sll(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SLL_HL: z80_write8(cpu, (cpu->registers.IY + d), z80_op_sll(cpu, z80_read8(cpu, (cpu->registers.IY + d)))); break;
-    // case FD_CB_SLL_A: cpu->registers.A = z80_op_sll(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    // SHIFT LEFT LOGICAL (SLL) - 8-bit registers (undocumented)
+    case FD_CB_SLL_B: cpu->registers.B = z80_op_sll(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SLL_C: cpu->registers.C = z80_op_sll(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SLL_D: cpu->registers.D = z80_op_sll(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SLL_E: cpu->registers.E = z80_op_sll(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SLL_H: cpu->registers.H = z80_op_sll(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SLL_L: cpu->registers.L = z80_op_sll(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SLL_HL: z80_write8(cpu, (cpu->registers.IY + d), z80_op_sll(cpu, z80_read8(cpu, (cpu->registers.IY + d)))); break;
+    case FD_CB_SLL_A: cpu->registers.A = z80_op_sll(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
 
-    // // SHIFT RIGHT LOGICAL (SRL) - 8-bit registers
-    // case FD_CB_SRL_B: cpu->registers.B = z80_op_srl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SRL_C: cpu->registers.C = z80_op_srl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SRL_D: cpu->registers.D = z80_op_srl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SRL_E: cpu->registers.E = z80_op_srl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SRL_H: cpu->registers.H = z80_op_srl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SRL_L: cpu->registers.L = z80_op_srl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
-    // case FD_CB_SRL_HL: z80_write8(cpu, (cpu->registers.IY + d), z80_op_srl(cpu, z80_read8(cpu, (cpu->registers.IY + d)))); break;
-    // case FD_CB_SRL_A: cpu->registers.A = z80_op_srl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    // SHIFT RIGHT LOGICAL (SRL) - 8-bit registers
+    case FD_CB_SRL_B: cpu->registers.B = z80_op_srl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SRL_C: cpu->registers.C = z80_op_srl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SRL_D: cpu->registers.D = z80_op_srl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SRL_E: cpu->registers.E = z80_op_srl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SRL_H: cpu->registers.H = z80_op_srl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SRL_L: cpu->registers.L = z80_op_srl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
+    case FD_CB_SRL_HL: z80_write8(cpu, (cpu->registers.IY + d), z80_op_srl(cpu, z80_read8(cpu, (cpu->registers.IY + d)))); break;
+    case FD_CB_SRL_A: cpu->registers.A = z80_op_srl(cpu, z80_read8(cpu, (cpu->registers.IY + d))); break;
 
     // BIT TEST - Bit 0
     case FD_CB_BIT_0_B: 
@@ -491,165 +491,165 @@ void z80_execute_fd_cb_instruction(struct z80_t *cpu, int8_t d)
     case FD_CB_BIT_7_HL: 
     case FD_CB_BIT_7_A: z80_op_bit(cpu, 7, z80_read8(cpu, (uint16_t)(cpu->registers.IY + d))); break;
 
-    // // BIT RESET - Bit 0
-    // case FD_CB_RES_0_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_res(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_0_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_res(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_0_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_res(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_0_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_res(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_0_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_res(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_0_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_res(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_0_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_res(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_0_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_res(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    // BIT RESET - Bit 0
+    case FD_CB_RES_0_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_res(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_0_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_res(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_0_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_res(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_0_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_res(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_0_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_res(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_0_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_res(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_0_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_res(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_0_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_res(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
 
-    // // BIT RESET - Bit 1
-    // case FD_CB_RES_1_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_res(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_1_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_res(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_1_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_res(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_1_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_res(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_1_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_res(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_1_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_res(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_1_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_res(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_1_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_res(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    // BIT RESET - Bit 1
+    case FD_CB_RES_1_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_res(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_1_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_res(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_1_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_res(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_1_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_res(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_1_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_res(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_1_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_res(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_1_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_res(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_1_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_res(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
 
-    // // BIT RESET - Bit 2
-    // case FD_CB_RES_2_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_res(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_2_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_res(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_2_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_res(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_2_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_res(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_2_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_res(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_2_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_res(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_2_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_res(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_2_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_res(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    // BIT RESET - Bit 2
+    case FD_CB_RES_2_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_res(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_2_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_res(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_2_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_res(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_2_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_res(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_2_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_res(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_2_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_res(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_2_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_res(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_2_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_res(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
 
-    // // BIT RESET - Bit 3
-    // case FD_CB_RES_3_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_res(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_3_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_res(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_3_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_res(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_3_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_res(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_3_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_res(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_3_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_res(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_3_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_res(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_3_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_res(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    // BIT RESET - Bit 3
+    case FD_CB_RES_3_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_res(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_3_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_res(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_3_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_res(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_3_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_res(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_3_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_res(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_3_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_res(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_3_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_res(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_3_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_res(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
 
-    // // BIT RESET - Bit 4
-    // case FD_CB_RES_4_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_res(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_4_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_res(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_4_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_res(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_4_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_res(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_4_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_res(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_4_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_res(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_4_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_res(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_4_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_res(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    // BIT RESET - Bit 4
+    case FD_CB_RES_4_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_res(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_4_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_res(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_4_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_res(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_4_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_res(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_4_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_res(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_4_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_res(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_4_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_res(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_4_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_res(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
 
-    // // BIT RESET - Bit 5
-    // case FD_CB_RES_5_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_res(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_5_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_res(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_5_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_res(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_5_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_res(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_5_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_res(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_5_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_res(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_5_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_res(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_5_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_res(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    // BIT RESET - Bit 5
+    case FD_CB_RES_5_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_res(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_5_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_res(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_5_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_res(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_5_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_res(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_5_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_res(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_5_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_res(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_5_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_res(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_5_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_res(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
 
-    // // BIT RESET - Bit 6
-    // case FD_CB_RES_6_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_res(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_6_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_res(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_6_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_res(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_6_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_res(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_6_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_res(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_6_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_res(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_6_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_res(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_6_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_res(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    // BIT RESET - Bit 6
+    case FD_CB_RES_6_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_res(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_6_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_res(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_6_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_res(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_6_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_res(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_6_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_res(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_6_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_res(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_6_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_res(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_6_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_res(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
 
-    // // BIT RESET - Bit 7
-    // case FD_CB_RES_7_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_res(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_7_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_res(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_7_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_res(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_7_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_res(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_7_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_res(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_7_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_res(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_7_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_res(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_RES_7_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_res(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    // BIT RESET - Bit 7
+    case FD_CB_RES_7_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_res(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_7_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_res(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_7_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_res(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_7_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_res(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_7_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_res(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_7_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_res(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_7_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_res(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_RES_7_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_res(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
 
-    // // BIT SET - Bit 0
-    // case FD_CB_SET_0_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_set(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_0_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_set(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_0_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_set(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_0_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_set(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_0_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_set(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_0_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_set(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_0_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_set(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_0_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_set(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    // BIT SET - Bit 0
+    case FD_CB_SET_0_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_set(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_0_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_set(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_0_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_set(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_0_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_set(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_0_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_set(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_0_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_set(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_0_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_set(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_0_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_set(cpu, 0, z80_read8(cpu, cpu->registers.IY + d)));} break;
 
-    // // BIT SET - Bit 1
-    // case FD_CB_SET_1_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_set(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_1_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_set(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_1_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_set(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_1_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_set(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_1_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_set(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_1_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_set(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_1_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_set(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_1_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_set(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    // BIT SET - Bit 1
+    case FD_CB_SET_1_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_set(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_1_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_set(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_1_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_set(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_1_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_set(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_1_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_set(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_1_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_set(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_1_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_set(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_1_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_set(cpu, 1, z80_read8(cpu, cpu->registers.IY + d)));} break;
 
-    // // BIT SET - Bit 2
-    // case FD_CB_SET_2_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_set(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_2_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_set(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_2_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_set(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_2_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_set(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_2_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_set(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_2_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_set(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_2_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_set(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_2_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_set(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    // BIT SET - Bit 2
+    case FD_CB_SET_2_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_set(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_2_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_set(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_2_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_set(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_2_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_set(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_2_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_set(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_2_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_set(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_2_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_set(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_2_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_set(cpu, 2, z80_read8(cpu, cpu->registers.IY + d)));} break;
 
-    // // BIT SET - Bit 3
-    // case FD_CB_SET_3_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_set(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_3_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_set(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_3_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_set(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_3_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_set(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_3_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_set(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_3_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_set(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_3_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_set(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_3_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_set(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    // BIT SET - Bit 3
+    case FD_CB_SET_3_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_set(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_3_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_set(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_3_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_set(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_3_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_set(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_3_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_set(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_3_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_set(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_3_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_set(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_3_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_set(cpu, 3, z80_read8(cpu, cpu->registers.IY + d)));} break;
 
-    // // BIT SET - Bit 4
-    // case FD_CB_SET_4_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_set(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_4_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_set(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_4_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_set(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_4_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_set(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_4_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_set(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_4_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_set(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_4_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_set(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_4_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_set(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    // BIT SET - Bit 4
+    case FD_CB_SET_4_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_set(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_4_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_set(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_4_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_set(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_4_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_set(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_4_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_set(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_4_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_set(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_4_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_set(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_4_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_set(cpu, 4, z80_read8(cpu, cpu->registers.IY + d)));} break;
 
-    // // BIT SET - Bit 5
-    // case FD_CB_SET_5_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_set(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_5_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_set(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_5_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_set(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_5_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_set(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_5_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_set(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_5_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_set(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_5_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_set(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_5_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_set(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    // BIT SET - Bit 5
+    case FD_CB_SET_5_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_set(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_5_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_set(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_5_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_set(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_5_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_set(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_5_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_set(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_5_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_set(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_5_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_set(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_5_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_set(cpu, 5, z80_read8(cpu, cpu->registers.IY + d)));} break;
 
-    // // BIT SET - Bit 6
-    // case FD_CB_SET_6_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_set(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_6_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_set(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_6_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_set(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_6_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_set(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_6_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_set(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_6_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_set(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_6_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_set(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_6_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_set(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    // BIT SET - Bit 6
+    case FD_CB_SET_6_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_set(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_6_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_set(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_6_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_set(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_6_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_set(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_6_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_set(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_6_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_set(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_6_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_set(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_6_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_set(cpu, 6, z80_read8(cpu, cpu->registers.IY + d)));} break;
 
-    // // BIT SET - Bit 7
-    // case FD_CB_SET_7_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_set(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_7_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_set(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_7_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_set(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_7_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_set(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_7_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_set(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_7_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_set(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_7_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_set(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
-    // case FD_CB_SET_7_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_set(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    // BIT SET - Bit 7
+    case FD_CB_SET_7_B: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.B = z80_op_set(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_7_C: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.C = z80_op_set(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_7_D: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.D = z80_op_set(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_7_E: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.E = z80_op_set(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_7_H: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.H = z80_op_set(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_7_L: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.L = z80_op_set(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_7_HL: { z80_write8(cpu, cpu->registers.IY + d, z80_op_set(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
+    case FD_CB_SET_7_A: { z80_write8(cpu, cpu->registers.IY + d, cpu->registers.A = z80_op_set(cpu, 7, z80_read8(cpu, cpu->registers.IY + d)));} break;
 
     default:
         printf("Unimplemented CB Instruction: 0x%02X\n", cb_opcode);

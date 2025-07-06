@@ -457,7 +457,7 @@ void z80_execute_instruction(struct z80_t *cpu, uint8_t opcode)
     case FD_PREFIX: z80_execute_fd_instruction(cpu, z80_fetch8(cpu)); break;
     case CB_PREFIX: z80_execute_cb_instruction(cpu, z80_fetch8(cpu)); break;
     default:
-        printf("Unimplemented Instruction: 0x%02X at PC: 0x%04X\n", opcode, cpu->registers.PC - 1);
+        // printf("Unimplemented Instruction: 0x%02X at PC: 0x%04X\n", opcode, cpu->registers.PC - 1);
         cpu->running = false;
         cpu->halted = true;
         break;

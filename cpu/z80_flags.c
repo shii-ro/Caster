@@ -389,6 +389,15 @@ uint8_t set_flags_cpl(struct z80_t *cpu)
     return ~cpu->registers.A;
 }
 
+void set_flags_rotate_digit(struct z80_t *cpu)
+{
+    set_flag_if(cpu, MASK_S, cpu->registers.A & 0x80);
+    set_flag_if(cpu, MASK_Z, cpu->registers.A == 0);
+    clear_flag(cpu, MASK_H);
+    set_flag_if(cpu, MASK_PV, is_even_parity(cpu->registers.A));
+    clear_flag(cpu, MASK_N);
+}
+
 void set_flags_ccf(struct z80_t *cpu)
 {
     bool old_carry = (cpu->registers.F & MASK_C) != 0;
@@ -406,30 +415,24 @@ void set_flags_scf(struct z80_t *cpu)
 
 uint8_t set_flags_rra(struct z80_t *cpu)
 {
-    uint8_t carry_in = get_flag(cpu, MASK_C) ? 0x80 : 0;
-    uint8_t result = (cpu->registers.A >> 1) | carry_in;
+    uint8_t carry_in = get_flag(cpu, MASK_C);
+    uint8_t result = (cpu->registers.A >> 1) | (carry_in << 7);
 
     set_flag_if(cpu, MASK_C, cpu->registers.A & 0x01);
     clear_flag(cpu, MASK_H);
     clear_flag(cpu, MASK_N);
-    set_flag_if(cpu, MASK_S, result & 0x80);  // Sign flag (bit 7 of result)
-    set_flag_if(cpu, MASK_Z, result == 0);    // Zero flag
-    clear_flag(cpu, MASK_PV);                  // Parity/Overflow flag is reset
     
     return result;
 }
 
 uint8_t set_flags_rla(struct z80_t *cpu)
 {
-    uint8_t carry_in = get_flag(cpu, MASK_C) ? 1 : 0;
+    uint8_t carry_in = get_flag(cpu, MASK_C);
     uint8_t result = (cpu->registers.A << 1) | carry_in;
 
     set_flag_if(cpu, MASK_C, cpu->registers.A & 0x80);
     clear_flag(cpu, MASK_H);
     clear_flag(cpu, MASK_N);
-    set_flag_if(cpu, MASK_S, result & 0x80);  // Sign flag (bit 7 of result)
-    set_flag_if(cpu, MASK_Z, result == 0);    // Zero flag
-    clear_flag(cpu, MASK_PV);                  // Parity/Overflow flag is reset
     
     return result;
 }

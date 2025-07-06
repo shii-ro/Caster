@@ -207,6 +207,11 @@ void z80_op_sub8(struct z80_t *cpu, uint8_t r)
     cpu->registers.A = set_flags_sub8(cpu, cpu->registers.A, r);
 }
 
+void z80_op_neg(struct z80_t *cpu)
+{
+    cpu->registers.A = set_flags_sub8(cpu, 0, cpu->registers.A);
+}
+
 void z80_op_adc8(struct z80_t *cpu, uint8_t r)
 {
     cpu->registers.A = set_flags_adc8(cpu, cpu->registers.A, r);
@@ -215,6 +220,37 @@ void z80_op_adc8(struct z80_t *cpu, uint8_t r)
 void z80_op_sbc8(struct z80_t *cpu, uint8_t r)
 {
     cpu->registers.A = set_flags_sbc8(cpu, cpu->registers.A, r);
+}
+
+void z80_op_rld(struct z80_t *cpu)
+{
+    uint8_t _hl_ = z80_read8(cpu, cpu->registers.HL); // value of (HL)
+    uint8_t _hl_upper_nibble = _hl_ & NIBBLE_HIGH;
+    uint8_t _hl_lower_nibble = _hl_ & NIBBLE_LOW;
+    uint8_t a_lower_nibble = cpu->registers.A & NIBBLE_LOW;
+
+    _hl_ = (_hl_ & ~NIBBLE_HIGH) | (_hl_ << 4);
+    cpu->registers.A = (cpu->registers.A & ~NIBBLE_LOW) | (_hl_upper_nibble >> 4);
+    _hl_ = (_hl_ & ~NIBBLE_LOW) | a_lower_nibble;
+
+    
+    z80_write8(cpu, cpu->registers.HL, _hl_);
+    set_flags_rotate_digit(cpu);
+}
+
+void z80_op_rrd(struct z80_t *cpu)
+{
+    uint8_t _hl_ = z80_read8(cpu, cpu->registers.HL); // value of (HL)
+    uint8_t _hl_upper_nibble = _hl_ & NIBBLE_HIGH;
+    uint8_t _hl_lower_nibble = _hl_ & NIBBLE_LOW;
+    uint8_t a_lower_nibble = cpu->registers.A & NIBBLE_LOW;
+
+    cpu->registers.A = (cpu->registers.A & ~NIBBLE_LOW) | (_hl_lower_nibble);
+    _hl_ = (_hl_ & ~NIBBLE_HIGH) | (a_lower_nibble << 4);
+    _hl_ = (_hl_ & ~NIBBLE_LOW) | _hl_upper_nibble >> 4;
+
+    z80_write8(cpu, cpu->registers.HL, _hl_);
+    set_flags_rotate_digit(cpu);
 }
 
 void z80_op_adc16(struct z80_t *cpu, uint16_t rr)

@@ -137,8 +137,8 @@ void z80_execute_ed_instruction(struct z80_t *cpu, uint8_t opcode)
     // case ED_IM_2: cpu->interrupt_mode = 2; break;
     
     // ROTATE DIGIT INSTRUCTIONS
-    // case ED_RRD: z80_op_rrd(cpu); break;
-    // case ED_RLD: z80_op_rld(cpu); break;
+    case ED_RRD: z80_op_rrd(cpu); break;
+    case ED_RLD: z80_op_rld(cpu); break;
     
     // BLOCK TRANSFER INSTRUCTIONS
     // case ED_LDI:
@@ -208,22 +208,22 @@ void z80_execute_ed_instruction(struct z80_t *cpu, uint8_t opcode)
         }
         break;
         
-    // case ED_LDDR:
-    //     {
-    //         uint8_t value = z80_read8(cpu, cpu->registers.HL);
-    //         z80_write8(cpu, cpu->registers.DE, value);
-    //         cpu->registers.HL--;
-    //         cpu->registers.DE--;
-    //         cpu->registers.BC--;
-    //         set_flags_block_transfer(cpu, cpu->registers.BC);
+    case ED_LDDR:
+        {
+            uint8_t value = z80_read8(cpu, cpu->registers.HL);
+            z80_write8(cpu, cpu->registers.DE, value);
+            cpu->registers.HL--;
+            cpu->registers.DE--;
+            cpu->registers.BC--;
+            set_flags_block_transfer(cpu, cpu->registers.BC);
             
-    //         if (cpu->registers.BC != 0)
-    //         {
-    //             cpu->registers.PC -= 2;
-    //             cpu->cycle_count += 5;
-    //         }
-    //     }
-    //     break;
+            if (cpu->registers.BC != 0)
+            {
+                cpu->registers.PC -= 2;
+                cpu->cycle_count += 5;
+            }
+        }
+        break;
         
     case ED_CPDR:
         {
@@ -238,6 +238,23 @@ void z80_execute_ed_instruction(struct z80_t *cpu, uint8_t opcode)
             }
         }
         break;
+    case ED_LDI:
+    {
+        uint8_t value = z80_read8(cpu, cpu->registers.HL);
+        z80_write8(cpu, cpu->registers.DE, value);
+        cpu->registers.HL++;
+        cpu->registers.DE++;
+        cpu->registers.BC--;
+
+        set_flags_block_transfer(cpu, cpu->registers.BC);
+        break;
+    }
+
+    case ED_NEG:
+    {
+        z80_op_neg(cpu);
+        break;
+    }
         
     // // I/O Block instructions (simplified - you'll need proper I/O handling)
     // case ED_INI:
