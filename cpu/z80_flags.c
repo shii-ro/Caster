@@ -226,6 +226,12 @@ void set_flags_block_transfer(struct z80_t *cpu, uint16_t bc_after)
     set_flag_if(cpu, MASK_5, bc_after & MASK_5);
 }
 
+void set_flags_block_io(struct z80_t *cpu)
+{
+    set_flag(cpu, MASK_Z);
+    set_flag(cpu, MASK_N);
+}
+
 uint8_t set_flags_cpd(struct z80_t *cpu, uint8_t r)
 {
     uint8_t result = cpu->registers.A - r;

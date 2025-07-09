@@ -250,12 +250,10 @@ void z80_execute_ed_instruction(struct z80_t *cpu, uint8_t opcode)
         break;
     }
 
-    case ED_NEG:
-    {
-        z80_op_neg(cpu);
-        break;
-    }
-        
+    case ED_NEG:  z80_op_neg(cpu); break;
+    case ED_IM_0: cpu->int_mode = 0; break;
+    case ED_IM_1: cpu->int_mode = 1; break;
+    case ED_IM_2: cpu->int_mode = 2; break;
     // // I/O Block instructions (simplified - you'll need proper I/O handling)
     // case ED_INI:
     //     {
@@ -277,15 +275,15 @@ void z80_execute_ed_instruction(struct z80_t *cpu, uint8_t opcode)
     //     }
     //     break;
         
-    // case ED_OUTI:
-    //     {
-    //         uint8_t value = z80_read8(cpu, cpu->registers.HL);
-    //         z80_output(cpu, cpu->registers.C, value);
-    //         cpu->registers.HL++;
-    //         cpu->registers.B--;
-    //         set_flags_block_io(cpu, cpu->registers.B);
-    //     }
-    //     break;
+    case ED_OUTI:
+        {
+            uint8_t value = z80_read8(cpu, cpu->registers.HL);
+            z80_port_out(cpu, cpu->registers.C, value); // the correct address is BC ????
+            cpu->registers.HL++;
+            cpu->registers.B--;
+            set_flags_block_io(cpu);
+        }
+        break;
         
     // case ED_OUTD:
     //     {
@@ -329,21 +327,22 @@ void z80_execute_ed_instruction(struct z80_t *cpu, uint8_t opcode)
     //     }
     //     break;
         
-    // case ED_OTIR:
-    //     {
-    //         uint8_t value = z80_read8(cpu, cpu->registers.HL);
-    //         z80_output(cpu, cpu->registers.C, value);
-    //         cpu->registers.HL++;
-    //         cpu->registers.B--;
-    //         set_flags_block_io(cpu, cpu->registers.B);
-            
-    //         if (cpu->registers.B != 0)
-    //         {
-    //             cpu->registers.PC -= 2;
-    //             cpu->cycle_count += 5;
-    //         }
-    //     }
-    //     break;
+    case ED_OTIR:
+        {
+            uint8_t value = z80_read8(cpu, cpu->registers.HL);
+            z80_port_out(cpu, cpu->registers.C, value); // the correct address is BC ????
+            // z80_write8(cpu, cpu->registers.C, value);
+            cpu->registers.HL++;
+            cpu->registers.B--;
+            set_flags_block_io(cpu);
+
+            if (cpu->registers.B != 0)
+            {
+                cpu->registers.PC -= 2;
+                cpu->cycle_count += 5;
+            }
+        }
+        break;
         
     // case ED_OTDR:
     //     {

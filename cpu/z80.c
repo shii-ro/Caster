@@ -47,13 +47,18 @@ uint8_t z80_read8(struct z80_t *cpu, uint16_t addr)
 
 void z80_write8(struct z80_t *cpu, uint16_t addr, uint8_t value)
 {
-    // debugging the address at 0x1d45
-    // if(addr == 0x1d45 && value == 0xC4)
-    // {
-    //     cpu->debug = true;
-    // }
     cpu->write8(cpu->memory_ctx, addr, value);
     cpu->cycle_count += 3;
+}
+
+uint8_t z80_port_in(struct z80_t *cpu, uint8_t port)
+{
+    return cpu->io_read8(cpu->io_ctx, port);
+}
+
+void z80_port_out(struct z80_t *cpu, uint8_t port, uint8_t value)
+{
+    cpu->io_write8(cpu->io_ctx, port, value);
 }
 
 uint16_t z80_read16(struct z80_t *cpu, uint16_t addr)
@@ -88,6 +93,51 @@ uint8_t z80_fetch_opcode(struct z80_t *cpu)
     uint8_t opcode = z80_read8(cpu, cpu->registers.PC++);
     cpu->cycle_count += 1; // Extra T-state for opcode fetch
     return opcode;
+}
+
+// Z80 interrupt functions
+void z80_set_interrupt_line(struct z80_t *cpu, bool state)
+{
+    cpu->interrupt_line = state;
+}
+
+void z80_handle_interrupt(struct z80_t *cpu)
+{
+    if (!cpu->iff1 || !cpu->interrupt_line) 
+    {
+        return;
+    }
+    
+    // Handle interrupt based on interrupt mode
+    switch (cpu->int_mode) {
+        case 0:
+            // IM 0 - not commonly used in Master System
+            // Would need external device to provide instruction
+            break;
+            
+        case 1:
+            // IM 1 - Jump to $0038 (Master System default)
+            cpu->halted = false;
+            z80_stack_push16(cpu, cpu->registers.PC);
+            cpu->registers.PC = 0x0038;
+            cpu->iff1 = false;
+            cpu->iff2 = false;
+            cpu->cycles += 13;  // Interrupt acknowledge cycles
+            break;
+            
+        case 2:
+            // IM 2 - Vectored interrupt
+            // Not typically used in Master System
+            break;
+    }
+    
+    // Clear interrupt line after acknowledgment
+    cpu->interrupt_line = false;
+}
+
+void z80_check_interrupts(struct z80_t *cpu)
+{
+    z80_handle_interrupt(cpu);
 }
 
 int z80_step(struct z80_t *cpu)
@@ -129,8 +179,7 @@ void z80_init(struct z80_t *cpu)
     cpu->int_mode = 0;
     cpu->cycles = 0;
     cpu->running = true;
-
-    cpu->registers.PC = 0x100;
+    // cpu->debug = true;
 }
 
 void z80_reset(struct z80_t *cpu)
@@ -144,12 +193,19 @@ void z80_reset(struct z80_t *cpu)
     cpu->running = true;
 }
 
+
 void z80_run_cycles(struct z80_t *cpu, uint64_t target_cycles)
 {
     uint64_t start_cycles = cpu->cycles;
 
     while ((cpu->cycles - start_cycles) < target_cycles && cpu->running && !cpu->halted)
     {
+        z80_check_interrupts(cpu);
+        if (cpu->debug)
+        {
+            z80_disassemble_instruction(cpu);
+        }
+        // Check for interrupts
         z80_step(cpu);
     }
 }

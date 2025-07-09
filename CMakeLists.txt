@@ -36,7 +36,8 @@ add_executable(ms_emu
     WIN32
     main.c
     core/sms.c
-    mem/mem.c
+    mmu/mmu.c
+    vdp/vdp.c
     cpu/z80.c
     cpu/z80_dasm.c
     cpu/z80_op.c

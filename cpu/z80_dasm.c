@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include "z80.h"
 #include "z80_opcode_table.h"
+#include <SDL3/SDL.h>
+
+static char disasm_buffer[128];
 
 // Table lookup function
 const opcode_info_t *get_opcode_info(struct z80_t *cpu, uint16_t pc, int *total_length, char *prefix_bytes, size_t prefix_size)
@@ -76,15 +79,14 @@ const opcode_info_t *get_opcode_info(struct z80_t *cpu, uint16_t pc, int *total_
     return info;
 }
 
-void z80_disassemble_instruction(struct z80_t *cpu, char *buffer, size_t buffer_size)
+void z80_disassemble_instruction(struct z80_t *cpu)
 {
     uint16_t start_pc = cpu->registers.PC;
     int      total_length;
     char     prefix_bytes[4] = {0}; // Support up to 4 prefix bytes
     
     // Get the appropriate opcode info
-    const opcode_info_t *info = get_opcode_info(cpu, start_pc, &total_length, 
-                                              prefix_bytes, sizeof(prefix_bytes));
+    const opcode_info_t *info = get_opcode_info(cpu, start_pc, &total_length, prefix_bytes, sizeof(prefix_bytes));
     
     const char *mnemonic = info->name;
     char        formatted_mnemonic[64];
@@ -157,9 +159,25 @@ void z80_disassemble_instruction(struct z80_t *cpu, char *buffer, size_t buffer_
             break;
         }
     }
-    
-    // Final output formatting with proper alignment
-    snprintf(buffer, buffer_size, "PC: %04X: %s %s", start_pc, aligned_hex, formatted_mnemonic);
+
+    SDL_Log("PC: %04X: %s %s \t SP:%04X CYC:%llu AF:%04X BC:%04X DE:%04X HL:%04X IX:%04X IY:%04X I:%02X R:%02X",
+        start_pc, aligned_hex, formatted_mnemonic,
+        cpu->registers.SP, cpu->cycles,
+        cpu->registers.AF, cpu->registers.BC,
+        cpu->registers.DE, cpu->registers.HL,
+        cpu->registers.IX, cpu->registers.IY,
+        cpu->registers.I, cpu->registers.R);
+
+    // snprintf(disasm_buffer, sizeof(disasm_buffer), "PC: %04X: %s %s", start_pc, aligned_hex, formatted_mnemonic);
+    // // Final output formatting with proper alignment
+    // SDL_Log(disasm_buffer);
+    // SDL_Log("SP:%04X CYC:%llu AF:%04X BC:%04X DE:%04X HL:%04X "
+    //         "IX:%04X IY:%04X I:%02X R:%02X\n",
+    //         cpu->registers.SP, cpu->cycles,
+    //         cpu->registers.AF, cpu->registers.BC,
+    //         cpu->registers.DE, cpu->registers.HL,
+    //         cpu->registers.IX, cpu->registers.IY,
+    //         cpu->registers.I, cpu->registers.R);
 }
 
 // Helper function for debugging - shows which table was used
@@ -187,7 +205,7 @@ void z80_disassemble_instruction_verbose(struct z80_t *cpu, char *buffer, size_t
     }
 
     // Get regular disassembly
-    z80_disassemble_instruction(cpu, buffer, buffer_size);
+    z80_disassemble_instruction(cpu);
 
     // Append table info
     size_t len = strlen(buffer);

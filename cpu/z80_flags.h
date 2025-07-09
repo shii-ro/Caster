@@ -85,6 +85,7 @@ void set_flags_sub16(struct z80_t *cpu, uint16_t a, uint16_t b, uint16_t result)
 void set_flags_adc16(struct z80_t *cpu, uint16_t a, uint16_t b, uint16_t result);
 void set_flags_sbc16(struct z80_t *cpu, uint16_t a, uint16_t b, uint16_t result);
 void set_flags_block_transfer(struct z80_t *cpu, uint16_t bc_after);
+void set_flags_block_io(struct z80_t *cpu);
 uint8_t set_flags_cpd(struct z80_t *cpu, uint8_t r);
 uint8_t set_flags_cpi(struct z80_t *cpu, uint8_t r);
 uint8_t set_flags_rlca(struct z80_t *cpu);

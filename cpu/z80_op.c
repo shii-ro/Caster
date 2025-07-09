@@ -268,3 +268,9 @@ void z80_op_sbc16(struct z80_t *cpu, uint16_t rr)
     set_flags_sbc16(cpu, cpu->registers.HL, rr, result);
     cpu->registers.HL = result;
 }
+
+void z80_op_rst(struct z80_t *cpu, uint16_t p)
+{
+    z80_stack_push16(cpu, cpu->registers.PC);
+    cpu->registers.PC = p;
+}

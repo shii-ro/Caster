@@ -115,6 +115,7 @@ struct z80_t
     uint8_t cycle_count;
     bool running;
     bool debug;
+    bool interrupt_line;
 
     // Memory interface function pointers
     uint8_t (*read8)(void* context, uint16_t addr);
@@ -123,6 +124,7 @@ struct z80_t
     void (*write16)(void* context, uint16_t addr, uint16_t value);
     uint8_t (*io_read8)(void* context, uint8_t port);
     void (*io_write8)(void* context, uint8_t port, uint8_t value);
+    void *io_ctx;
     void *memory_ctx;
 };
 
@@ -142,7 +144,7 @@ void z80_write8(struct z80_t *cpu, uint16_t addr, uint8_t  data);
 void z80_write16(struct z80_t *cpu, uint16_t addr, uint16_t data);
 uint8_t z80_read8(struct z80_t* cpu, uint16_t addr);
 uint16_t z80_read16(struct z80_t* cpu, uint16_t addr);
-void z80_disassemble_instruction(struct z80_t* cpu, char* buffer, size_t buffer_size);
+void z80_disassemble_instruction(struct z80_t *cpu);
 void z80_disassemble_instruction_verbose(struct z80_t *cpu, char *buffer, size_t buffer_size);
 void z80_stack_push8(struct z80_t *cpu, uint8_t value);
 void z80_stack_push16(struct z80_t *cpu, uint16_t value);
@@ -152,7 +154,12 @@ uint8_t z80_read8(struct z80_t *cpu, uint16_t addr);
 uint16_t z80_read16(struct z80_t *cpu, uint16_t addr);
 void z80_write8(struct z80_t *cpu, uint16_t addr, uint8_t value);
 void z80_write16(struct z80_t *cpu, uint16_t addr, uint16_t value);
+uint8_t z80_port_in(struct z80_t *cpu, uint8_t port);
+void z80_port_out(struct z80_t *cpu, uint8_t port, uint8_t value);
 uint8_t z80_fetch8(struct z80_t *cpu);
 uint16_t z80_fetch16(struct z80_t *cpu);
 uint8_t z80_fetch_opcode(struct z80_t *cpu);
+void z80_set_interrupt_line(struct z80_t *cpu, bool state);
+void z80_handle_interrupt(struct z80_t *cpu);
+void z80_check_interrupts(struct z80_t *cpu);
 #endif

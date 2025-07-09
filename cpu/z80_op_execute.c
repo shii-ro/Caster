@@ -383,27 +383,36 @@ void z80_execute_instruction(struct z80_t *cpu, uint8_t opcode)
     case JR_Z_d:  z80_op_jr(cpu, IS_Z_SET(cpu));    break;
     case JR_NC_d: z80_op_jr(cpu, IS_C_UNSET(cpu));  break;
     case JR_C_d:  z80_op_jr(cpu, IS_C_SET(cpu));    break;
-    // case DJNZ_e:
-    //     {
-    //         int8_t offset = (int8_t)z80_fetch8(cpu);
-    //         cpu->registers.B--;
-    //         cpu->cycle_count += 5; // Base cycles
-    //         if (cpu->registers.B != 0) {
-    //             cpu->registers.PC += offset;
-    //             cpu->cycle_count += 3; // Additional cycles for taken branch
-    //         }
-    //     }
-    //     break;
+    case DJNZ_e:
+        {
+            int8_t offset = (int8_t)z80_fetch8(cpu);
+            cpu->registers.B--;
+            cpu->cycle_count += 5; // Base cycles
+            if (cpu->registers.B != 0) {
+                cpu->registers.PC += offset;
+                cpu->cycle_count += 3; // Additional cycles for taken branch
+            }
+        }
+        break;
     
     // === CALL INSTRUCTIONS ===
-    case CALL_nn: z80_op_call(cpu, true); break;
+    case CALL_nn:    z80_op_call(cpu, true); break;
+    case CALL_Z_nn:  z80_op_call(cpu, IS_Z_SET(cpu)); break;
     case CALL_NZ_nn: z80_op_call(cpu, IS_Z_UNSET(cpu)); break;
-    case CALL_C_nn: z80_op_call(cpu, IS_C_SET(cpu)); break;
+    case CALL_C_nn:  z80_op_call(cpu, IS_C_SET(cpu)); break;
+    case CALL_NC_nn: z80_op_call(cpu, IS_C_UNSET(cpu)); break;
     
     // === RETURN INSTRUCTIONS ===
-    case RET: z80_op_ret(cpu, true); break;
-    case RET_Z: z80_op_ret(cpu, IS_Z_SET(cpu)); break;
-    
+    case RET:    z80_op_ret(cpu, true); break;
+    case RET_Z:  z80_op_ret(cpu, IS_Z_SET(cpu)); break;
+    case RET_NZ: z80_op_ret(cpu, IS_Z_UNSET(cpu)); break;
+    case RET_PE: z80_op_ret(cpu, IS_PV_SET(cpu)); break;
+    case RET_PO: z80_op_ret(cpu, IS_PV_UNSET(cpu)); break;
+    case RET_C:  z80_op_ret(cpu, IS_C_SET(cpu)); break;
+    case RET_NC: z80_op_ret(cpu, IS_C_UNSET(cpu)); break;
+    case RET_M:  z80_op_ret(cpu, IS_S_SET(cpu)); break;
+    case RET_P:  z80_op_ret(cpu, IS_S_UNSET(cpu)); break;
+
     // === STACK OPERATIONS ===
     case POP_BC: cpu->registers.BC = z80_stack_pop16(cpu); break;
     case POP_DE: cpu->registers.DE = z80_stack_pop16(cpu); break;
@@ -413,6 +422,15 @@ void z80_execute_instruction(struct z80_t *cpu, uint8_t opcode)
     case PUSH_DE: z80_stack_push16(cpu, cpu->registers.DE); cpu->cycle_count++; break;
     case PUSH_HL: z80_stack_push16(cpu, cpu->registers.HL); cpu->cycle_count++; break;
     case PUSH_AF: z80_stack_push16(cpu, cpu->registers.AF); cpu->cycle_count++; break;
+
+    case RST_00: z80_op_rst(cpu, 0x0000); break;
+    case RST_08: z80_op_rst(cpu, 0x0008); break;
+    case RST_10: z80_op_rst(cpu, 0x0010); break;
+    case RST_18: z80_op_rst(cpu, 0x0018); break;
+    case RST_20: z80_op_rst(cpu, 0x0020); break;
+    case RST_28: z80_op_rst(cpu, 0x0028); break;
+    case RST_30: z80_op_rst(cpu, 0x0030); break;
+    case RST_38: z80_op_rst(cpu, 0x0038); break;
     
     // === EXCHANGE INSTRUCTIONS ===
     case EX_AF_AF:
@@ -450,6 +468,19 @@ void z80_execute_instruction(struct z80_t *cpu, uint8_t opcode)
     case CPL: cpu->registers.A = set_flags_cpl(cpu); break;
     case SCF: set_flags_scf(cpu); break;
     case CCF: set_flags_ccf(cpu); break;
+
+    case IN_A_n:
+    {
+        uint8_t port = z80_fetch8(cpu);
+        cpu->registers.A = z80_port_in(cpu, port);
+        break;
+    }
+    case OUT_n_A:
+    {
+        uint8_t port = z80_fetch8(cpu);
+        z80_port_out(cpu, port, cpu->registers.A);
+        break;
+    }
     
     // === PREFIX INSTRUCTIONS ===
     case DD_PREFIX: z80_execute_dd_instruction(cpu, z80_fetch8(cpu)); break;

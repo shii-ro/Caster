@@ -32,3 +32,4 @@ uint8_t z80_op_sla(struct z80_t *cpu, uint8_t r);
 uint8_t z80_op_sra(struct z80_t *cpu, uint8_t r);
 uint8_t z80_op_sll(struct z80_t *cpu, uint8_t r);
 uint8_t z80_op_srl(struct z80_t *cpu, uint8_t r);
+void z80_op_rst(struct z80_t *cpu, uint16_t p);
