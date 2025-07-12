@@ -143,6 +143,12 @@ struct vdp_t
     uint16_t h_counter;
     uint8_t line_counter;
 
+    // Scrolling
+    uint8_t fine_y_scroll;
+    uint8_t gross_y_scroll;
+    uint8_t fine_x_scroll;
+    uint8_t gross_x_scroll;
+
     // Status
     uint8_t vblank_flag;
     uint8_t sprite_overflow_flag;
@@ -166,5 +172,6 @@ uint8_t vdp_control_port_read(struct vdp_t *vdp);
 void vdp_data_port_write(struct vdp_t *vdp, uint8_t value);
 uint8_t vdp_data_port_read(struct vdp_t *vdp);
 bool vdp_interrupt_pending(struct vdp_t *vdp);
+void vdp_draw_nametable(struct vdp_t *vdp, uint32_t *framebuffer);
 
 #endif

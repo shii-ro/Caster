@@ -9,6 +9,7 @@
         "stdbool.h": "c",
         "type_traits": "c",
         "z80_test.h": "c",
-        "sms.h": "c"
+        "sms.h": "c",
+        "cstdlib": "c"
     }
 }

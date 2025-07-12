@@ -12,7 +12,7 @@ void vdp_init(struct vdp_t *vdp)
 
 static uint32_t vdp_get_color(struct vdp_t *vdp, uint8_t color_index)
 {
-    uint8_t color6 = vdp->cram[color_index & 0x0F]; // Only 16 colors
+    uint8_t color6 = vdp->cram[color_index];
     
     // Master System color format: BBGGRR (6-bit)
     uint8_t r = (color6 & 0x03) * 85;        // Bits 1-0: Red
@@ -27,26 +27,109 @@ void vdp_step(struct vdp_t *vdp, uint8_t cycles)
     vdp->total_cycles += cycles;
 }
 
+void vdp_draw_nametable(struct vdp_t *vdp, uint32_t *framebuffer)
+{
+    // Get name table base address from register 2
+    uint16_t name_table_base = (vdp->registers[2] & 0x0E) << 10;
+
+    // Master System nametable is 32 tiles wide x 28 tiles tall
+    // Each tile is 8x8 pixels, so total size is 256x224 pixels
+    for (uint8_t tile_row = 0; tile_row < 28; tile_row++)
+    {
+        for (uint8_t tile_col = 0; tile_col < 32; tile_col++)
+        {
+            // Calculate nametable entry address (2 bytes per entry)
+            uint16_t name_table_offset = (tile_row * 32 + tile_col) * 2;
+            uint16_t name_table_address = name_table_base + name_table_offset;
+
+            // Ensure we don't read beyond VRAM bounds
+            if (name_table_address >= 0x4000)
+            {
+                name_table_address &= 0x3FFF;
+            }
+
+            // Read tile data from name table
+            uint8_t tile_index = vdp->vram[name_table_address];
+            uint8_t tile_attributes = vdp->vram[name_table_address + 1];
+
+            // Extract tile attributes
+            uint8_t palette_select = (tile_attributes >> 3) & 1; // Bit 3: palette selection
+            uint8_t priority = (tile_attributes >> 4) & 1;       // Bit 4: priority
+            uint8_t flip_x = (tile_attributes >> 1) & 1;         // Bit 1: horizontal flip
+            uint8_t flip_y = (tile_attributes >> 2) & 1;         // Bit 2: vertical flip
+
+            // Calculate pattern table address
+            uint16_t pattern_table_base = 0x0000; // Typical pattern table address
+            uint16_t tile_address = pattern_table_base + (tile_index * 32);
+
+            // Draw all 8 rows of this tile
+            for (uint8_t row_in_tile = 0; row_in_tile < 8; row_in_tile++)
+            {
+                // Handle vertical flip
+                uint8_t actual_row = flip_y ? (7 - row_in_tile) : row_in_tile;
+
+                // Ensure tile address is within bounds
+                if (tile_address + actual_row * 4 + 3 >= 0x4000)
+                {
+                    continue; // Skip invalid tiles
+                }
+
+                // Read the four bitplanes for this row
+                uint8_t byte1 = vdp->vram[tile_address + actual_row * 4 + 0];
+                uint8_t byte2 = vdp->vram[tile_address + actual_row * 4 + 1];
+                uint8_t byte3 = vdp->vram[tile_address + actual_row * 4 + 2];
+                uint8_t byte4 = vdp->vram[tile_address + actual_row * 4 + 3];
+
+                // Decode all 8 pixels in this row
+                for (int pixel = 0; pixel < 8; pixel++)
+                {
+                    uint8_t bit_pos = flip_x ? pixel : (7 - pixel);
+
+                    // Extract 4-bit color index from 4 bitplanes
+                    uint8_t color_index = 0;
+                    color_index |= ((byte1 >> bit_pos) & 1) << 0; // Bitplane 0
+                    color_index |= ((byte2 >> bit_pos) & 1) << 1; // Bitplane 1
+                    color_index |= ((byte3 >> bit_pos) & 1) << 2; // Bitplane 2
+                    color_index |= ((byte4 >> bit_pos) & 1) << 3; // Bitplane 3
+
+                    // Add palette offset (16 colors per palette)
+                    if (palette_select && color_index != 0)
+                    {
+                        color_index += 16;
+                    }
+
+                    // Calculate screen position (no scrolling applied)
+                    uint16_t screen_x = (tile_col * 8) + pixel;
+                    uint16_t screen_y = (tile_row * 8) + row_in_tile;
+
+                    // Ensure we don't write outside the framebuffer
+                    if (screen_x < 256 && screen_y < 224)
+                    {
+                        // Get final color and write to framebuffer
+                        uint32_t rgb = vdp_get_color(vdp, color_index);
+                        framebuffer[screen_y * 256 + screen_x] = rgb;
+                    }
+                }
+            }
+        }
+    }
+}
 
 static void vdp_draw_scanline(struct vdp_t *vdp, uint32_t *framebuffer, uint16_t scanline)
 {
-    // First, draw the background layer
-    
     // Calculate which tile row we're on
-    uint8_t scroll_x = vdp->bg_x_scroll;
-    uint8_t scroll_y = vdp->bg_y_scroll;
-    uint8_t effective_y = (scanline + scroll_y) % 224;  // Wrap around screen height
+    uint8_t effective_y = (scanline + vdp->bg_y_scroll) % 224;  // Wrap around screen height
     uint8_t tile_row = effective_y / 8;
-    uint8_t row_in_tile = effective_y % 8;
+    uint8_t row_in_tile = (effective_y) % 8;
 
     // Draw 32 tiles across the screen (256 pixels / 8 pixels per tile)
     for (uint16_t screen_tile_x = 0; screen_tile_x < 32; screen_tile_x++)
     {
         // Calculate which tile column to fetch (with horizontal scrolling)
-        uint8_t tile_column = (screen_tile_x + (scroll_x / 8)) % 32;
+        uint8_t tile_column = (screen_tile_x + (32 - vdp->gross_x_scroll)) % 32;
         
         // Get name table entry (2 bytes per entry)
-        uint16_t name_table_base = 0x3800;  // Typical name table address
+        uint16_t name_table_base = (vdp->registers[2] & 0x0E) << 10;
         uint16_t name_table_offset = (tile_row * 32 + tile_column) * 2;
         uint16_t name_table_address = name_table_base + name_table_offset;
         
@@ -61,7 +144,7 @@ static void vdp_draw_scanline(struct vdp_t *vdp, uint32_t *framebuffer, uint16_t
         uint8_t flip_y = (tile_attributes >> 2) & 1;          // Bit 2: vertical flip
         
         // Calculate pattern table address
-        uint16_t pattern_table_base = 0x0000;  // Typical pattern table address
+        uint16_t pattern_table_base = 0x0000;  
         uint16_t tile_address = pattern_table_base + (tile_index * 32);
         
         // Handle vertical flip
@@ -91,125 +174,125 @@ static void vdp_draw_scanline(struct vdp_t *vdp, uint32_t *framebuffer, uint16_t
             }
             
             // Calculate screen position with horizontal scrolling
-            uint16_t screen_x = (screen_tile_x * 8 + pixel - (scroll_x % 8) + 256) % 256;
+            uint16_t screen_x = ((screen_tile_x * 8) + pixel + vdp->fine_x_scroll) % 256;
             
             // Get final color and write to framebuffer
             uint32_t rgb = vdp_get_color(vdp, color_index);
-            framebuffer[(scanline * 256) + screen_x] = rgb;
+            framebuffer[(scanline* 256) + screen_x] = rgb;
         }
     }
     
-    // // Now draw sprites on top of the background
-    // // Master System supports up to 64 sprites, but only 8 per scanline
-    // uint8_t sprites_on_line = 0;
+    // Now draw sprites on top of the background
+    // Master System supports up to 64 sprites, but only 8 per scanline
+    uint8_t sprites_on_line = 0;
     
-    // // Get sprite size setting from register
-    // uint8_t sprite_height = (vdp->registers[1] & 0x02) ? 16 : 8;
+    // Get sprite size setting from register
+    uint8_t sprite_height = (vdp->registers[1] & 0x02) ? 16 : 8;
     
-    // // Get sprite pattern generator base address from register 6
-    // uint16_t sprite_pattern_base = (vdp->registers[6] & 0x04) ? 0x2000 : 0x0000;
+    // Get sprite pattern generator base address from register 6
+    uint16_t sprite_pattern_base = (vdp->registers[6] & 0x04) ? 0x2000 : 0x0000;
     
-    // for (uint16_t sprite_idx = 0; sprite_idx < 64; sprite_idx++)
-    // {
-    //     // Check sprite limit per scanline
-    //     if (sprites_on_line >= 8) {
-    //         // Set sprite overflow flag if your VDP struct supports it
-    //         // vdp->status |= VDP_STATUS_SPRITE_OVERFLOW;
-    //         break;
-    //     }
+    for (uint16_t sprite_idx = 0; sprite_idx < 64; sprite_idx++)
+    {
+        // Check sprite limit per scanline
+        if (sprites_on_line >= 8) {
+            // Set sprite overflow flag if your VDP struct supports it
+            // vdp->status |= VDP_STATUS_SPRITE_OVERFLOW;
+            break;
+        }
         
-    //     // Read sprite Y coordinate from SAT
-    //     uint8_t sprite_y = vdp->sat[sprite_idx];
+        // Read sprite Y coordinate from SAT
+        uint8_t sprite_y = vdp->sat[sprite_idx];
         
-    //     // Check for end-of-sprite-list marker
-    //     if (sprite_y == 0xD0) {
-    //         break;
-    //     }
+        // Check for end-of-sprite-list marker
+        if (sprite_y == 0xD0) {
+            break;
+        }
         
-    //     // Check if sprite is on this scanline
-    //     // Master System sprite Y coordinate system: Y=0 means sprite starts at line 1
-    //     int16_t sprite_line = (int16_t)scanline - (sprite_y + 1);
-    //     if (sprite_line < 0 || sprite_line >= sprite_height) {
-    //         continue;
-    //     }
+        // Check if sprite is on this scanline
+        // Master System sprite Y coordinate system: Y=0 means sprite starts at line 1
+        int16_t sprite_line = (int16_t)scanline - (sprite_y + 1);
+        if (sprite_line < 0 || sprite_line >= sprite_height) {
+            continue;
+        }
         
-    //     sprites_on_line++;
+        sprites_on_line++;
         
-    //     // Read sprite X position and pattern index from SAT
-    //     uint16_t sat_x_offset = 0x80 + (sprite_idx * 2);
-    //     uint8_t sprite_x = vdp->sat[sat_x_offset];
-    //     uint8_t sprite_pattern = vdp->sat[sat_x_offset + 1];
+        // Read sprite X position and pattern index from SAT
+        uint16_t sat_x_offset = 0x80 + (sprite_idx * 2);
+        uint8_t sprite_x = vdp->sat[sat_x_offset];
+        uint8_t sprite_pattern = vdp->sat[sat_x_offset + 1];
         
-    //     // Handle left column masking (sprites with X < 8 are shifted left by 8)
-    //     bool left_shift = false;
-    //     if (sprite_x < 8) {
-    //         left_shift = true;
-    //     }
+        // Handle left column masking (sprites with X < 8 are shifted left by 8)
+        bool left_shift = false;
+        if (sprite_x < 8) {
+            left_shift = true;
+        }
         
-    //     // Handle 8x16 sprites
-    //     uint8_t current_sprite_line = sprite_line;
-    //     if (sprite_height == 16) {
-    //         sprite_pattern &= 0xFE;  // Use even pattern numbers for 8x16 sprites
-    //         if (sprite_line >= 8) {
-    //             sprite_pattern |= 0x01;  // Use next pattern for bottom half
-    //             current_sprite_line = sprite_line - 8;
-    //         }
-    //     }
+        // Handle 8x16 sprites
+        uint8_t current_sprite_line = sprite_line;
+        if (sprite_height == 16) {
+            sprite_pattern &= 0xFE;  // Use even pattern numbers for 8x16 sprites
+            if (sprite_line >= 8) {
+                sprite_pattern |= 0x01;  // Use next pattern for bottom half
+                current_sprite_line = sprite_line - 8;
+            }
+        }
         
-    //     // Calculate sprite tile address in pattern table
-    //     uint16_t sprite_tile_address = sprite_pattern_base + (sprite_pattern * 32);
+        // Calculate sprite tile address in pattern table
+        uint16_t sprite_tile_address = sprite_pattern_base + (sprite_pattern * 32);
         
-    //     // Read the four bitplanes for this sprite row
-    //     uint8_t sbyte1 = vdp->vram[sprite_tile_address + current_sprite_line * 4 + 0];
-    //     uint8_t sbyte2 = vdp->vram[sprite_tile_address + current_sprite_line * 4 + 1];
-    //     uint8_t sbyte3 = vdp->vram[sprite_tile_address + current_sprite_line * 4 + 2];
-    //     uint8_t sbyte4 = vdp->vram[sprite_tile_address + current_sprite_line * 4 + 3];
+        // Read the four bitplanes for this sprite row
+        uint8_t sbyte1 = vdp->vram[sprite_tile_address + current_sprite_line * 4 + 0];
+        uint8_t sbyte2 = vdp->vram[sprite_tile_address + current_sprite_line * 4 + 1];
+        uint8_t sbyte3 = vdp->vram[sprite_tile_address + current_sprite_line * 4 + 2];
+        uint8_t sbyte4 = vdp->vram[sprite_tile_address + current_sprite_line * 4 + 3];
         
-    //     // Draw sprite pixels
-    //     for (int pixel = 0; pixel < 8; pixel++)
-    //     {
-    //         // Calculate screen position
-    //         int16_t screen_x = sprite_x + pixel;
+        // Draw sprite pixels
+        for (int pixel = 0; pixel < 8; pixel++)
+        {
+            // Calculate screen position
+            int16_t screen_x = sprite_x + pixel;
             
-    //         // Apply left column shift if needed
-    //         if (left_shift) {
-    //             screen_x -= 8;
-    //         }
+            // Apply left column shift if needed
+            if (left_shift) {
+                screen_x -= 8;
+            }
             
-    //         // Check horizontal bounds
-    //         if (screen_x < 0 || screen_x >= 256) {
-    //             continue;
-    //         }
+            // Check horizontal bounds
+            if (screen_x < 0 || screen_x >= 256) {
+                continue;
+            }
             
-    //         // Extract sprite pixel color
-    //         uint8_t sprite_color = 0;
-    //         sprite_color |= ((sbyte1 >> (7 - pixel)) & 1) << 0;
-    //         sprite_color |= ((sbyte2 >> (7 - pixel)) & 1) << 1;
-    //         sprite_color |= ((sbyte3 >> (7 - pixel)) & 1) << 2;
-    //         sprite_color |= ((sbyte4 >> (7 - pixel)) & 1) << 3;
+            // Extract sprite pixel color
+            uint8_t sprite_color = 0;
+            sprite_color |= ((sbyte1 >> (7 - pixel)) & 1) << 0;
+            sprite_color |= ((sbyte2 >> (7 - pixel)) & 1) << 1;
+            sprite_color |= ((sbyte3 >> (7 - pixel)) & 1) << 2;
+            sprite_color |= ((sbyte4 >> (7 - pixel)) & 1) << 3;
             
-    //         // Skip transparent pixels (color 0)
-    //         if (sprite_color == 0) 
-    //         {
-    //             continue;
-    //         }
+            // Skip transparent pixels (color 0)
+            if (sprite_color == 0) 
+            {
+                continue;
+            }
             
-    //         // Sprites use palette 1 (colors 16-31)
-    //         sprite_color += 32;
+            // Sprites use palette 1 (colors 16-31)
+            sprite_color += 16;
             
-    //         // Check for sprite collision (if enabled)
-    //         uint32_t current_pixel = framebuffer[scanline * 256 + screen_x];
-    //         uint32_t bg_color = vdp_get_color(vdp, 0);
-    //         if (current_pixel != bg_color) {  // If not background color
-    //             // Set sprite collision flag if your VDP struct supports it
-    //             // vdp->status |= VDP_STATUS_SPRITE_COLLISION;
-    //         }
+            // Check for sprite collision (if enabled)
+            uint32_t current_pixel = framebuffer[scanline * 256 + screen_x];
+            uint32_t bg_color = vdp_get_color(vdp, 0);
+            if (current_pixel != bg_color) 
+            {  
+                // vdp->status |= VDP_STATUS_SPRITE_COLLISION;
+            }
             
-    //         // Draw sprite pixel (sprites have priority over background)
-    //         uint32_t sprite_rgb = vdp_get_color(vdp, sprite_color);
-    //         framebuffer[scanline * 256 + screen_x] = sprite_rgb;
-    //     }
-    // }
+            // Draw sprite pixel (sprites have priority over background)
+            uint32_t sprite_rgb = vdp_get_color(vdp, sprite_color);
+            framebuffer[scanline * 256 + screen_x] = sprite_rgb;
+        }
+    }
 }
 
 void vdp_process_scanline(struct vdp_t *vdp, uint32_t *framebuffer)
@@ -429,9 +512,13 @@ void vdp_write_register(struct vdp_t *vdp, vdp_register_t r, uint8_t value)
         break;
     case VDP_REG_HORIZONTAL_SCROLL:
         vdp->bg_x_scroll = value;
+        vdp->gross_x_scroll = (vdp->bg_x_scroll >> 3) & 0b11111;
+        vdp->fine_x_scroll = (vdp->bg_x_scroll & 0b111);
         break;
     case VDP_REG_VERTICAL_SCROLL:
         vdp->bg_y_scroll = value;
+        vdp->gross_y_scroll = (vdp->bg_y_scroll >> 3) & 0b11111;
+        vdp->fine_y_scroll = (vdp->bg_y_scroll & 0b111);
         break;
     case VDP_REG_LINE_INTERRUPT_COUNTER:
         vdp->line_counter_reload_value = value;

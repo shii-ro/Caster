@@ -6,6 +6,10 @@ static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
 static SDL_Texture *texture = NULL;
 
+static SDL_Window *nametable_window = NULL;
+static SDL_Renderer *nametable_renderer = NULL;
+static SDL_Texture *nametable_texture = NULL;
+
 SDL_AppResult sms_init()
 {
     if (SDL_Init(SDL_INIT_VIDEO) == false)
@@ -13,16 +17,31 @@ SDL_AppResult sms_init()
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Couldn't initialize SDL!", SDL_GetError(), NULL);
         return SDL_APP_FAILURE;
     }
+
     // 800x450 is 16:9
     if (SDL_CreateWindowAndRenderer("Master System", 256 * 3, 192 * 3, 0, &window, &renderer) == false)
     {
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Couldn't create window/renderer!", SDL_GetError(), NULL);
         return SDL_APP_FAILURE;
     }
-    SDL_SetRenderVSync(renderer, 1);
+
+    if (SDL_CreateWindowAndRenderer("Master System : Nametable", 256, 224, 0, &nametable_window, &nametable_renderer) == false)
+    {
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Couldn't create window/renderer!", SDL_GetError(), NULL);
+        return SDL_APP_FAILURE;
+    }
+
+    // SDL_SetRenderVSync(renderer, 1);
 
     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 256, 192);
     if(texture == NULL)
+    {
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Couldn't create surface", SDL_GetError(), NULL);
+        return SDL_APP_FAILURE;
+    }
+
+    nametable_texture = SDL_CreateTexture(nametable_renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 256, 224);
+    if(nametable_texture == NULL)
     {
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Couldn't create surface", SDL_GetError(), NULL);
         return SDL_APP_FAILURE;
@@ -201,6 +220,14 @@ void sms_port_write(struct sms_t *sms, uint8_t port, uint8_t value)
 void sms_run_frame(struct sms_t *sms)
 {
     static uint32_t framebuffer[256 * 192];
+    static uint32_t nametable_framebuffer[256 * 224];
+    const int64_t target_frame_time_ns = 16666666;  // 60 FPS
+
+    SDL_Time start_time;
+    SDL_Time end_time;
+    SDL_Time elapsed_time;
+
+    SDL_GetCurrentTime(&start_time);
 
     for (uint16_t scanline = 0; scanline < 262; scanline++)
     {
@@ -211,10 +238,27 @@ void sms_run_frame(struct sms_t *sms)
         {
             z80_set_interrupt_line(&sms->cpu, true);
         }
-    }
+    }    
+
+    vdp_draw_nametable(&sms->vdp, nametable_framebuffer);
 
     SDL_UpdateTexture(texture, NULL, framebuffer, 256 * sizeof(uint32_t));
     SDL_RenderClear(renderer);
     SDL_RenderTexture(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer);
+
+    SDL_UpdateTexture(nametable_texture, NULL, nametable_framebuffer, 256 * sizeof(uint32_t));
+    SDL_RenderClear(nametable_renderer);
+    SDL_RenderTexture(nametable_renderer, nametable_texture, NULL, NULL);
+    SDL_RenderPresent(nametable_renderer);
+
+    SDL_GetCurrentTime(&end_time);
+
+    elapsed_time = end_time - start_time;
+    int64_t time_to_sleep = target_frame_time_ns - elapsed_time;
+
+    if (elapsed_time < target_frame_time_ns)
+    {
+        SDL_DelayNS(target_frame_time_ns - elapsed_time);
+    }
 }

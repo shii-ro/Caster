@@ -281,7 +281,7 @@ void z80_execute_ed_instruction(struct z80_t *cpu, uint8_t opcode)
             z80_port_out(cpu, cpu->registers.C, value); // the correct address is BC ????
             cpu->registers.HL++;
             cpu->registers.B--;
-            set_flags_block_io(cpu);
+            set_flags_block_outi(cpu);
         }
         break;
         
