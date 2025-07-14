@@ -8,14 +8,14 @@
             "name": "(gdb) Launch Debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/${workspaceFolderBasename}.exe",
+            "program": "${workspaceFolder}/build/${workspaceFolderBasename}",
             "args": ["${workspaceFolder}/roms/Sonic The Hedgehog (USA, Europe).sms"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "C:/msys64/ucrt64/bin/gdb.exe",
+            "miDebuggerPath": "/usr/bin/gdb",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",
@@ -39,14 +39,14 @@
             "name": "(gdb) Launch Release",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build-release/${workspaceFolderBasename}.exe",
+            "program": "${workspaceFolder}/build-release/${workspaceFolderBasename}",
             "args": ["${workspaceFolder}/roms/Sonic The Hedgehog (USA, Europe).sms"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "C:/msys64/ucrt64/bin/gdb.exe",
+            "miDebuggerPath": "/usr/bin/gdb",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",

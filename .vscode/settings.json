@@ -10,6 +10,12 @@
         "type_traits": "c",
         "z80_test.h": "c",
         "sms.h": "c",
-        "cstdlib": "c"
+        "cstdlib": "c",
+        "nuklear_sdl_renderer.h": "c",
+        "sdl_oldnames.h": "c",
+        "gui.h": "c",
+        "gui_cpu_state.h": "c",
+        "gui_styles.h": "c",
+        "bit_utils.h": "c"
     }
 }
