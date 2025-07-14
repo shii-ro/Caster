@@ -4,6 +4,7 @@
 #include "../cpu/z80.h"
 #include "../vdp/vdp.h"
 #include "../mmu/mmu.h"
+#include "../gui/gui.h"
 #include "SDL3/SDL.h"
 
 #define SMS_MASTER_CLOCK_HZ       53693100u   // 53.6931 MHz
@@ -15,18 +16,13 @@ struct sms_t
     struct z80_t cpu;
     struct mmu_t mem;
     struct vdp_t vdp;
-    // sms_memory_t memory;
-    // sms_vdp_t vdp;
-    // sms_psg_t psg;
-    // sms_io_t io;
-
     // System state
     bool powered_on;
     bool paused;
 };
 
 // System functions
-SDL_AppResult sms_init();
+SDL_AppResult sms_init(struct sms_t *sms);
 struct sms_t *sms_create(struct sms_t *core);
 void sms_destroy(struct sms_t *sms);
 bool sms_load_rom(struct sms_t *sms, const uint8_t *rom_data, size_t size);

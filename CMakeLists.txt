@@ -50,17 +50,39 @@ add_executable(ms_emu
     cpu/z80_dd_cb_op_execute.c
     cpu/z80_flags.c
     cpu/z80_test.c
+    utils/bit_utils.c
+    gui/gui.c
+    gui/gui_cpu_state.c
+    gui/gui_styles.c
 )
 
 
+set(NUKLEAR_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/Nuklear")
+add_library(nuklear INTERFACE)
+target_include_directories(nuklear INTERFACE ${NUKLEAR_INCLUDE_DIR})
 
 # Include directory for headers
-target_include_directories(ms_emu PRIVATE cpu core SDL3::SDL3)
+target_include_directories(ms_emu PRIVATE 
+    cpu 
+    core 
+    mmu
+    vdp
+    gui
+    utils
+    SDL3::SDL3
+    ${NUKLEAR_INCLUDE_DIR}
+)
 
 # set the include directory
 target_include_directories(ms_emu PUBLIC ${SDL3_INCLUDE_DIRS})
 
 # link all libraries to the project
-target_link_libraries(ms_emu PRIVATE SDL3::SDL3)
+target_link_libraries(ms_emu PRIVATE SDL3::SDL3 m)
 target_compile_definitions(ms_emu PRIVATE SDL_MAIN_USE_CALLBACKS)
-target_link_options(ms_emu PRIVATE -static)
+
+# Print configuration summary
+message(STATUS "=== Build Configuration ===")
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+message(STATUS "C Compiler: ${CMAKE_C_COMPILER_ID}")
+message(STATUS "Nuklear Include: ${NUKLEAR_INCLUDE_DIR}")
+message(STATUS "============================")

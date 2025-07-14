@@ -10,7 +10,7 @@ static SDL_Window *nametable_window = NULL;
 static SDL_Renderer *nametable_renderer = NULL;
 static SDL_Texture *nametable_texture = NULL;
 
-SDL_AppResult sms_init()
+SDL_AppResult sms_init(struct sms_t *sms)
 {
     if (SDL_Init(SDL_INIT_VIDEO) == false)
     {
@@ -18,20 +18,11 @@ SDL_AppResult sms_init()
         return SDL_APP_FAILURE;
     }
 
-    // 800x450 is 16:9
-    if (SDL_CreateWindowAndRenderer("Master System", 256 * 3, 192 * 3, 0, &window, &renderer) == false)
+    if (SDL_CreateWindowAndRenderer("Master System", 1200, 800, SDL_WINDOW_MAXIMIZED, &window, &renderer) == false)
     {
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Couldn't create window/renderer!", SDL_GetError(), NULL);
         return SDL_APP_FAILURE;
     }
-
-    if (SDL_CreateWindowAndRenderer("Master System : Nametable", 256, 224, 0, &nametable_window, &nametable_renderer) == false)
-    {
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Couldn't create window/renderer!", SDL_GetError(), NULL);
-        return SDL_APP_FAILURE;
-    }
-
-    // SDL_SetRenderVSync(renderer, 1);
 
     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 256, 192);
     if(texture == NULL)
@@ -40,12 +31,7 @@ SDL_AppResult sms_init()
         return SDL_APP_FAILURE;
     }
 
-    nametable_texture = SDL_CreateTexture(nametable_renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 256, 224);
-    if(nametable_texture == NULL)
-    {
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Couldn't create surface", SDL_GetError(), NULL);
-        return SDL_APP_FAILURE;
-    }
+    gui_init(window, renderer);
 
     return SDL_APP_CONTINUE;
 }
@@ -65,16 +51,30 @@ struct sms_t *sms_create(struct sms_t *core)
 
     core->cpu.memory_ctx = &core->mem;
     core->cpu.io_ctx = core;
-
-    // mmu_write8(&core->mem, 0x07, 0xC9);
-
+    
     return core;
 }
-
 
 void sms_destroy(struct sms_t *core)
 {
     mmu_deinit(&core->mem);
+
+    if (texture)
+    {
+        SDL_DestroyTexture(texture);
+    }
+
+    if (renderer)
+    {
+        SDL_DestroyRenderer(renderer);
+    }
+
+    if (window)
+    {
+        SDL_DestroyWindow(window);
+    }
+
+    gui_cleanup();
 }
 
 bool sms_load_rom(struct sms_t *sms, const uint8_t *rom_data, size_t size)
@@ -83,12 +83,6 @@ bool sms_load_rom(struct sms_t *sms, const uint8_t *rom_data, size_t size)
     {
         return false;
     }
-
-    // Load ROM into memory starting at address 0x0000
-    // for (size_t i = 0; i < size; i++)
-    // {
-    //     mmu_write8(&sms->mem, (uint16_t)i + 0x100, rom_data[i]);
-    // }
 
     mmu_load_rom(&sms->mem, rom_data, size);
 
@@ -221,12 +215,8 @@ void sms_run_frame(struct sms_t *sms)
 {
     static uint32_t framebuffer[256 * 192];
     static uint32_t nametable_framebuffer[256 * 224];
-    const int64_t target_frame_time_ns = 16666666;  // 60 FPS
-
-    SDL_Time start_time;
-    SDL_Time end_time;
-    SDL_Time elapsed_time;
-
+    const int64_t target_frame_time_ns = 16666666; // 60 FPS
+    SDL_Time start_time, end_time, elapsed_time;
     SDL_GetCurrentTime(&start_time);
 
     for (uint16_t scanline = 0; scanline < 262; scanline++)
@@ -240,17 +230,14 @@ void sms_run_frame(struct sms_t *sms)
         }
     }    
 
-    vdp_draw_nametable(&sms->vdp, nametable_framebuffer);
+    // vdp_draw_nametable(&sms->vdp, nametable_framebuffer);
+    // SDL_UpdateTexture(nametable_texture, NULL, nametable_framebuffer, 256 * sizeof(uint32_t));
 
     SDL_UpdateTexture(texture, NULL, framebuffer, 256 * sizeof(uint32_t));
     SDL_RenderClear(renderer);
-    SDL_RenderTexture(renderer, texture, NULL, NULL);
+    gui_render(sms, renderer, texture);
     SDL_RenderPresent(renderer);
 
-    SDL_UpdateTexture(nametable_texture, NULL, nametable_framebuffer, 256 * sizeof(uint32_t));
-    SDL_RenderClear(nametable_renderer);
-    SDL_RenderTexture(nametable_renderer, nametable_texture, NULL, NULL);
-    SDL_RenderPresent(nametable_renderer);
 
     SDL_GetCurrentTime(&end_time);
 

@@ -2,68 +2,72 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "core/sms.h"
-#include "cpu/z80_test.h"
-#define SDL_MAIN_USE_CALLBACKS 1  /* use the callbacks instead of main() */
 #include <SDL3/SDL.h>
-#include <SDL3/SDL_main.h>
 
 struct sms_t sms;
 
-SDL_AppResult SDL_AppInit(void **appstate, int argc, char* argv[])
+int main(int argc, char* argv[])
 {
-    sms_init();
-    if (argc < 2)
-    {
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Usage: %s <filename>\n", argv[0], NULL);
-        return SDL_APP_FAILURE;
+    // Initialize SDL
+    if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS)) {
+        SDL_Log("SDL_Init failed: %s", SDL_GetError());
+        return 1;
+    }
+
+    // Check command line arguments
+    if (argc < 2) {
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Usage", "Usage: program <filename>", NULL);
+        SDL_Quit();
+        return 1;
     }
 
     const char *filename = argv[1];
 
+    // Initialize SMS emulator
+    sms_init(&sms);
     sms_create(&sms);
     sms_load_rom_file(&sms, filename);
 
-    return SDL_APP_CONTINUE;
-}
-
-// This function runs when a new event occurs
-SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
-{
-    switch (event->type)
-    {
-    case SDL_EVENT_QUIT:
-        // end the program, reporting success to the OS
-        return SDL_APP_SUCCESS;
-    case SDL_EVENT_KEY_DOWN:
-        if (event->key.key == SDLK_ESCAPE)
-        {
-            // end the program on ESC key,
-            // returning success to the OS
-            return SDL_APP_SUCCESS;
-        }
-        else if(event->key.key == SDLK_D)
-        {
-            sms.cpu.debug = !sms.cpu.debug;
-            return SDL_APP_CONTINUE;
-        }
+    // Main event loop
+    SDL_Event event;
+    int running = 1;
     
-    default:
-        break;
+    while (running) {
+        // Handle events
+        while (SDL_PollEvent(&event))
+        {
+            gui_input_begin();
+            switch (event.type)
+            {
+            case SDL_EVENT_QUIT:
+                running = 0;
+                break;
+
+            case SDL_EVENT_KEY_DOWN:
+                if (event.key.key == SDLK_ESCAPE)
+                {
+                    running = 0;
+                }
+                else if (event.key.key == SDLK_D)
+                {
+                    sms.cpu.debug = !sms.cpu.debug;
+                }
+                break;
+
+            default:
+                break;
+            }
+            gui_handle_event(&event);
+        }
+        gui_handle_grab();
+        gui_input_end();
+
+        sms_run_frame(&sms);
     }
 
-    // return continue to continue
-    return SDL_APP_CONTINUE;
-}
-
-// This function runs once per frame, and is the heart of the program
-SDL_AppResult SDL_AppIterate(void *app_state)
-{
-    sms_run_frame(&sms);
-    return SDL_APP_CONTINUE;
-}
-
-// This function runs once at shutdown
-void SDL_AppQuit(void *appstate, SDL_AppResult result)
-{
+    // Cleanup
     sms_destroy(&sms);
+    SDL_Quit();
+    
+    return 0;
 }
