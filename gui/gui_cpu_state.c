@@ -6,7 +6,7 @@
 #include "gui_styles.h"
 #include "bit_utils.h"
 
-static const char z80_flag_char_lut[] = {'S', 'Z', 'Y', 'H', 'X', 'P', 'N', 'C'};
+static const char z80_flag_char_lut[] = {'C', 'N', 'P', 'X', 'H', 'Y', 'Z', 'S'};
 
 static void u8_to_hex_str(uint8_t value, char *buffer)
 {
