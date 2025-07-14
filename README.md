@@ -1,3 +1,5 @@
-#Caster
-Sega Master System Emulator/Debugger written in C.
-![Emulator preview](https://github.com/shii-ro/Caster/blob/main/assets/caster_initial.png)
+# Caster
+
+**Caster** is a Sega Master System Emulator and Debugger written entirely in **C**.
+
+![Emulator Preview](https://github.com/shii-ro/Caster/blob/main/assets/caster_initial.png)
