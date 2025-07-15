@@ -12,6 +12,7 @@
 #include "nuklear_sdl_renderer.h"
 #include "gui_styles.h"
 #include "gui_cpu_state.h"
+#include "gui_menubar.h"
 #include "sms.h"
 
 static struct gui_state gui;
@@ -94,75 +95,8 @@ void gui_render(struct sms_t *sms, SDL_Renderer *renderer, SDL_Texture *emulator
     }
     nk_end(ctx);
 
-    if (nk_begin(ctx, "Menu", nk_rect(0, 0, 800, 30), NK_WINDOW_BACKGROUND | NK_WINDOW_NO_SCROLLBAR))
-    {
-
-        nk_layout_row_begin(ctx, NK_STATIC, 25, 6);
-        nk_layout_row_push(ctx, 60);
-        if (nk_button_label(ctx, "File"))
-        {
-            // File menu actions
-        }
-
-        nk_layout_row_push(ctx, 80);
-        if (nk_button_label(ctx, "Emulation"))
-        {
-            // Emulation menu actions
-        }
-
-        nk_layout_row_push(ctx, 60);
-        if (nk_button_label(ctx, "Debug"))
-        {
-            gui.show_debugger = !gui.show_debugger;
-        }
-
-        nk_layout_row_push(ctx, 60);
-        if (nk_button_label(ctx, "Memory"))
-        {
-            gui.show_memory_viewer = !gui.show_memory_viewer;
-        }
-
-        nk_layout_row_push(ctx, 60);
-        if (nk_button_label(ctx, "VDP"))
-        {
-            gui.show_vdp_viewer = !gui.show_vdp_viewer;
-        }
-
-        nk_layout_row_push(ctx, 80);
-        if (nk_button_label(ctx, "Nametable"))
-        {
-            gui.show_nametable = !gui.show_nametable;
-        }
-
-        nk_layout_row_end(ctx);
-        nk_end(ctx);
-    }
-
-    // ROM loader window
-    if (nk_begin(ctx, "ROM Loader", nk_rect(810, 0, 300, 120),
-                 NK_WINDOW_BORDER | NK_WINDOW_MOVABLE | NK_WINDOW_TITLE))
-    {
-
-        nk_layout_row_dynamic(ctx, 25, 1);
-        nk_label(ctx, "ROM Path:", NK_TEXT_LEFT);
-
-        nk_layout_row_dynamic(ctx, 25, 1);
-        nk_edit_string_zero_terminated(ctx, NK_EDIT_FIELD, gui.rom_path,
-                                       sizeof(gui.rom_path), nk_filter_default);
-
-        nk_layout_row_dynamic(ctx, 25, 2);
-        if (nk_button_label(ctx, "Load ROM"))
-        {
-            // Trigger ROM loading
-            printf("Loading ROM: %s\n", gui.rom_path);
-        }
-
-        if (nk_button_label(ctx, gui.emulator_paused ? "Resume" : "Pause"))
-        {
-            gui.emulator_paused = !gui.emulator_paused;
-        }
-        nk_end(ctx);
-    }
+    // MenuBar
+    gui_render_menubar(ctx, sdl.win, sms);
 
     gui_render_cpu_state_window(ctx, &sms->cpu);
 

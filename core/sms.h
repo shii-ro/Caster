@@ -19,6 +19,7 @@ struct sms_t
     // System state
     bool powered_on;
     bool paused;
+    bool rom_loaded;
 };
 
 // System functions

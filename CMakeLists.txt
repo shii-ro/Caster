@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(ms_emu C)
+project(caster C)
 
 # Set C standard
 set(CMAKE_C_STANDARD 99)
@@ -32,7 +32,7 @@ endif()
 
 
 # Add source files
-add_executable(ms_emu
+add_executable(caster
     WIN32
     main.c
     core/sms.c
@@ -54,6 +54,7 @@ add_executable(ms_emu
     gui/gui.c
     gui/gui_cpu_state.c
     gui/gui_styles.c
+    gui/gui_menubar.c
 )
 
 
@@ -62,7 +63,7 @@ add_library(nuklear INTERFACE)
 target_include_directories(nuklear INTERFACE ${NUKLEAR_INCLUDE_DIR})
 
 # Include directory for headers
-target_include_directories(ms_emu PRIVATE 
+target_include_directories(caster PRIVATE 
     cpu 
     core 
     mmu
@@ -74,11 +75,11 @@ target_include_directories(ms_emu PRIVATE
 )
 
 # set the include directory
-target_include_directories(ms_emu PUBLIC ${SDL3_INCLUDE_DIRS})
+target_include_directories(caster PUBLIC ${SDL3_INCLUDE_DIRS})
 
 # link all libraries to the project
-target_link_libraries(ms_emu PRIVATE SDL3::SDL3 m)
-target_compile_definitions(ms_emu PRIVATE SDL_MAIN_USE_CALLBACKS)
+target_link_libraries(caster PRIVATE SDL3::SDL3 m)
+target_compile_definitions(caster PRIVATE SDL_MAIN_USE_CALLBACKS)
 
 # Print configuration summary
 message(STATUS "=== Build Configuration ===")

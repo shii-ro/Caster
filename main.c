@@ -14,19 +14,19 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    // Check command line arguments
-    if (argc < 2) {
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Usage", "Usage: program <filename>", NULL);
-        SDL_Quit();
-        return 1;
-    }
-
-    const char *filename = argv[1];
-
     // Initialize SMS emulator
     sms_init(&sms);
     sms_create(&sms);
-    sms_load_rom_file(&sms, filename);
+
+    // Load ROM if provided via command line
+    if (argc >= 2)
+    {
+        const char *filename = argv[1];
+        if (!sms_load_rom_file(&sms, filename))
+        {
+            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Failed to load ROM file", NULL);
+        }
+    }
 
     // Main event loop
     SDL_Event event;
@@ -42,7 +42,6 @@ int main(int argc, char* argv[])
             case SDL_EVENT_QUIT:
                 running = 0;
                 break;
-
             case SDL_EVENT_KEY_DOWN:
                 if (event.key.key == SDLK_ESCAPE)
                 {
@@ -51,6 +50,10 @@ int main(int argc, char* argv[])
                 else if (event.key.key == SDLK_D)
                 {
                     sms.cpu.debug = !sms.cpu.debug;
+                }
+                else if (event.key.key == SDLK_P)
+                {
+                    sms.paused = !sms.paused;
                 }
                 break;
 
@@ -61,7 +64,7 @@ int main(int argc, char* argv[])
         }
         gui_handle_grab();
         gui_input_end();
-
+        
         sms_run_frame(&sms);
     }
 

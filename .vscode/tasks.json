@@ -107,7 +107,6 @@
                 ".",
                 "-B",
                 "build-release",
-                "-G",
             ],
             "group": "build",
             "presentation": {

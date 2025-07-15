@@ -59,7 +59,7 @@ void draw_single_register(struct nk_context *ctx, const char *name, uint8_t valu
         nk_layout_row(ctx, NK_DYNAMIC, row_height, 2, ratio); // Use 2 columns for nibbles
 
         char high_nibble[5], low_nibble[5];              // "0000\0"
-        byte_to_nibbles(value, high_nibble, low_nibble); // Assuming this function fills char arrays
+        byte_to_nibbles(value, high_nibble, low_nibble); 
 
         ctx->style.text.color = default_text_color;
         nk_label(ctx, high_nibble, NK_TEXT_ALIGN_RIGHT); // Align right for high nibble
@@ -71,7 +71,7 @@ void draw_single_register(struct nk_context *ctx, const char *name, uint8_t valu
 
 void draw_single_shadow_register(struct nk_context *ctx, const char *name, uint8_t value)
 {
-    const float row_height = 10.0f; // Adjusted for better visual balance
+    const float row_height = 10.0f; 
 
     char group_name[32]; // Max "RegisterName_reg\0" e.g., "A_reg", "F_reg"
     strcpy(group_name, name);
@@ -97,7 +97,7 @@ void draw_single_shadow_register(struct nk_context *ctx, const char *name, uint8
         nk_layout_row(ctx, NK_DYNAMIC, row_height, 2, ratio); // Use 2 columns for nibbles
 
         char high_nibble[5], low_nibble[5];              // "0000\0"
-        byte_to_nibbles(value, high_nibble, low_nibble); // Assuming this function fills char arrays
+        byte_to_nibbles(value, high_nibble, low_nibble); 
 
         ctx->style.text.color = default_text_color;
         nk_label(ctx, high_nibble, NK_TEXT_ALIGN_RIGHT); // Align right for high nibble
@@ -147,7 +147,6 @@ void draw_single_16bit_register(struct nk_context *ctx, const char *name, uint16
 
 void draw_z80_registers(struct nk_context *ctx, struct z80_t *cpu)
 {
-    // 8-bit registers in pairs layout
     struct
     {
         const char *name1;
@@ -164,13 +163,12 @@ void draw_z80_registers(struct nk_context *ctx, struct z80_t *cpu)
 
     for (int pair = 0; pair < num_pairs; pair++)
     {
-        nk_layout_row_dynamic(ctx, 35.0f, 2); // Adjusted based on `draw_single_register` calc.
+        nk_layout_row_dynamic(ctx, 35.0f, 2);
 
         draw_single_register(ctx, reg_pairs[pair].name1, *reg_pairs[pair].reg1);
         draw_single_register(ctx, reg_pairs[pair].name2, *reg_pairs[pair].reg2);
     }
 
-    // 8-bit registers in pairs layout
     struct
     {
         const char *name1;
