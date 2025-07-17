@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "core/sms.h"
+#include "input/input.h"
 #include <SDL3/SDL.h>
 
 struct sms_t sms;
@@ -55,8 +56,14 @@ int main(int argc, char* argv[])
                 {
                     sms.paused = !sms.paused;
                 }
+                else
+                {
+                    input_handle_event(&sms, event.key.key, 1);
+                }
                 break;
-
+            case SDL_EVENT_KEY_UP:
+                input_handle_event(&sms, event.key.key, 0);
+                break;
             default:
                 break;
             }

@@ -11,6 +11,25 @@
 #define SMS_SYSTEM_CLOCK_HZ       (SMS_MASTER_CLOCK_HZ / 15)  // ≈ 3579540 Hz
 #define NTSC_CHROMA_SUBCARRIER_HZ   3579545u    // 315 / 88 MHz (~3.579545 MHz)
 
+// SMS I/O Port definitions
+typedef enum
+{
+    // VDP (Video Display Processor) Ports
+    SMS_PORT_VDP_V_COUNTER = 0x7E, // VDP V Counter (read-only)
+    SMS_PORT_VDP_H_COUNTER = 0x7F, // VDP H Counter (read-only)
+    SMS_PORT_VDP_DATA      = 0xBE, // VDP Data Port (read/write)
+    SMS_PORT_VDP_CONTROL   = 0xBF, // VDP Control/Status Port (read/write)
+
+    // Controller/Input Ports
+    SMS_PORT_IO_A = 0xDC,    // I/O Port A (Controller 1)
+    SMS_PORT_IO_B = 0xDD,    // I/O Port B (Controller 2)
+
+    // PSG (Programmable Sound Generator) Port
+    // SMS_PORT_PSG = 0x7F, // PSG Data Port (write-only, same as H Counter)
+
+
+} sms_port_t;
+
 struct sms_t
 {
     struct z80_t cpu;
@@ -24,7 +43,7 @@ struct sms_t
 
 // System functions
 SDL_AppResult sms_init(struct sms_t *sms);
-struct sms_t *sms_create(struct sms_t *core);
+struct sms_t *sms_create(struct sms_t *sms);
 void sms_destroy(struct sms_t *sms);
 bool sms_load_rom(struct sms_t *sms, const uint8_t *rom_data, size_t size);
 bool sms_load_rom_file(struct sms_t *sms, const char *filename);

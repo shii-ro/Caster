@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "sms.h"
+#include "input.h"
 
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
@@ -42,31 +43,31 @@ SDL_AppResult sms_init(struct sms_t *sms)
     return SDL_APP_CONTINUE;
 }
 
-struct sms_t *sms_create(struct sms_t *core)
+struct sms_t *sms_create(struct sms_t *sms)
 {
-    mmu_init(&core->mem);
-    z80_init(&core->cpu);
-    vdp_init(&core->vdp);
+    mmu_init(&sms->mem);
+    z80_init(&sms->cpu);
+    vdp_init(&sms->vdp);
 
-    core->cpu.read8 = (uint8_t (*)(void *, uint16_t))mmu_read8;
-    core->cpu.write8 = (void (*)(void *, uint16_t, uint8_t))mmu_write8;
-    core->cpu.read16 = (uint16_t (*)(void *, uint16_t))mmu_read16;
-    core->cpu.write16 = (void (*)(void *, uint16_t, uint16_t))mmu_write16;
-    core->cpu.io_read8 = (uint8_t (*)(void *, uint8_t))sms_port_read;
-    core->cpu.io_write8 = (void (*)(void *, uint8_t, uint8_t))sms_port_write;
+    sms->cpu.read8 = (uint8_t (*)(void *, uint16_t))mmu_read8;
+    sms->cpu.write8 = (void (*)(void *, uint16_t, uint8_t))mmu_write8;
+    sms->cpu.read16 = (uint16_t (*)(void *, uint16_t))mmu_read16;
+    sms->cpu.write16 = (void (*)(void *, uint16_t, uint16_t))mmu_write16;
+    sms->cpu.io_read8 = (uint8_t (*)(void *, uint8_t))sms_port_read;
+    sms->cpu.io_write8 = (void (*)(void *, uint8_t, uint8_t))sms_port_write;
 
-    core->cpu.memory_ctx = &core->mem;
-    core->cpu.io_ctx = core;
+    sms->cpu.memory_ctx = &sms->mem;
+    sms->cpu.io_ctx = sms;
 
-    core->rom_loaded = false;
-    core->paused = false;
+    sms->rom_loaded = false;
+    sms->paused = false;
 
-    return core;
+    return sms;
 }
 
-void sms_destroy(struct sms_t *core)
+void sms_destroy(struct sms_t *sms)
 {
-    mmu_deinit(&core->mem);
+    mmu_deinit(&sms->mem);
 
     if (texture)
     {
@@ -114,7 +115,6 @@ bool sms_load_rom_file(struct sms_t *sms, const char *filename)
         return false;
     }
 
-    // Get file size more efficiently
     fseek(file, 0, SEEK_END);
     long size = ftell(file);
     fseek(file, 0, SEEK_SET);
@@ -168,14 +168,17 @@ void sms_reset(struct sms_t *sms)
 
 uint8_t sms_port_read(struct sms_t *sms, uint8_t port)
 {
-    switch (port & 0xFF)
+    switch (port)
     {
-    case 0x7E:
-    case 0x7F:
-    case 0xBE:
-    case 0xBF:
-        return vdp_port_read(&sms->vdp, port);
-
+        case SMS_PORT_VDP_V_COUNTER:
+        case SMS_PORT_VDP_H_COUNTER:
+        case SMS_PORT_VDP_DATA:
+        case SMS_PORT_VDP_CONTROL:
+            return vdp_port_read(&sms->vdp, port);
+        case SMS_PORT_IO_A:
+        case SMS_PORT_IO_B:
+            return input_port_read(sms, port);
+        
     default:
         return 0xFF;
     }
@@ -183,10 +186,10 @@ uint8_t sms_port_read(struct sms_t *sms, uint8_t port)
 
 void sms_port_write(struct sms_t *sms, uint8_t port, uint8_t value)
 {
-    switch (port & 0xFF)
+    switch (port)
     {
-    case 0xBE:
-    case 0xBF:
+    case SMS_PORT_VDP_DATA:
+    case SMS_PORT_VDP_CONTROL:
         vdp_port_write(&sms->vdp, port, value);
         break;
 

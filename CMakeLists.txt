@@ -55,6 +55,7 @@ add_executable(caster
     gui/gui_cpu_state.c
     gui/gui_styles.c
     gui/gui_menubar.c
+    input/input.c
 )
 
 
@@ -70,6 +71,7 @@ target_include_directories(caster PRIVATE
     vdp
     gui
     utils
+    input
     SDL3::SDL3
     ${NUKLEAR_INCLUDE_DIR}
 )
